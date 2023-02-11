@@ -25,6 +25,8 @@ closing_curly_brace                  (\})
 
 
 COMMENT_LINE                         "//".*
+COMMENT_BLOCK                        "/*"([^*])*"*/"
+WRONG_COMMENT_BLOCK                  "/*"([^\*\/])*   
 
 
 %%
@@ -83,7 +85,9 @@ COMMENT_LINE                         "//".*
 {opening_curly_brace}                       { printf( " opening_curly_brace ") ; }
 {closing_curly_brace}                       { printf( " closing_curly_brace ") ; }
 
-{COMMENT_LINE}                              { printf(" comment "); }
+{COMMENT_LINE}                              { printf(" comment_line "); }
+{COMMENT_BLOCK}                             { printf(" comment_block "); }
+{WRONG_COMMENT_BLOCK}                       { printf(" wrong_comment_block "); }
 
 
 

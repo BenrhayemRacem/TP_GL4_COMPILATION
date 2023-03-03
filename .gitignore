@@ -1,3 +1,9 @@
 .vscode/
 java_lexical_analyzer.exe
 java_lexical_analyzer.c
+
+java_syntax_analyzer.exe
+java_syntax_analyzer.tab.c
+java_syntax_analyzer.tab.h
+
+lex.yy.c

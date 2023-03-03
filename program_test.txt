@@ -4,37 +4,44 @@ this is a comment block
 used for testing
 **********/
 
-public class 3Test {
+public class MainClass {
+ public static void main ( String [] args ) {
+        
+        if( x <= 3) {
+            System.out.println("x is greater than 3") ;
+
+        }else {
+           // int 13y= 13 ;
+           int var ; 
+           var = 13 ;
+           anotherVar = this.getMember() ;
+            /* this is another comment block */
+        }
+}
+}
+
+
+ class Test {
     
 
         String ch = new String("abc");
         String emptyStr = "" ;
 
         /* this is a line comment */
-    public static void main (String args[]) {
-        int x =2 ;
-        if( x <= 3) {
-            System.out.println("x is greater than 3") ;
-
-        }else {
-            int 13y= 13 ;
-            this.member = 10;
-            /* this is another comment block */
+        public int someFunction () {
+            int y =10;
         }
+        public String FunctionWithParam( int x) {
+            int z =x ;
 
-        
-/*
-this is a comment block
-used for testing
-
-
+        }
 
         while ( true) {
             boolean bool = false ;
             bool = !bool && (x<2) ;
         }
     }
-}
+
 
 /* comment block not closing
     wrong block */

@@ -25,8 +25,8 @@ closing_curly_brace                  (\})
 
 
 COMMENT_LINE                         "//".*
-COMMENT_BLOCK                        "/*"([^*])*"*/"
-WRONG_COMMENT_BLOCK                  "/*"([^\*\/])*   
+COMMENT_BLOCK                        "/*"([^*]|\*+[^*/])*\*+"/"
+WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*   
 
 
 %%

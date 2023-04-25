@@ -3,7 +3,7 @@
  #include <stdio.h>	
  #include <stdlib.h>	
  		
- #include "java_syntax_analyzer.tab.h"	                                                                         	
+ #include "new_java_syntax_analyzer.tab.h"	                                                                         	
  /* Local stuff we need here... */	
 #include <math.h>	 			
 %}

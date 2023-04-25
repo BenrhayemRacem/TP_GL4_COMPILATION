@@ -7,3 +7,8 @@ java_syntax_analyzer.tab.c
 java_syntax_analyzer.tab.h
 
 lex.yy.c
+
+personal_notes.txt
+
+*.exe
+*.tab.*

@@ -63,8 +63,11 @@ extern int yylineno;
 
 %%
 
-Program                 : MainClass ClassDeclarationRecursive | MainClass  ;
+Program                 : MainClass ClassDeclarationRecursive  | error ClassDeclarationRecursive  ;
 
+//MainClass               : MainHead MainBody
+
+//MainHead                : ClassHead opening_curly_brace keyword_public keyword_static keyword_void keyword_main 
 MainClass               :  keyword_public keyword_class Identifier opening_curly_brace keyword_public 
                           keyword_static keyword_void keyword_main opening_parenthesis 
                           type_string opening_bracket closing_bracket Identifier 
@@ -75,7 +78,7 @@ ClassDeclarationRecursive : ClassDeclaration ClassDeclarationRecursive  ;
 ClassDeclaration        : keyword_class Identifier  keyword_extends Identifier ClassDeclarationBody 
                         | keyword_class Identifier ClassDeclarationBody ;
 
-ClassDeclarationBody    : opening_curly_brace VarDeclarationRecursive MethodDeclarationRecursive closing_curly_brace ;
+ClassDeclarationBody    : opening_curly_brace VarDeclarationRecursive MethodDeclarationRecursive closing_curly_brace | ;
 
 VarDeclarationRecursive : VarDeclaration VarDeclarationRecursive ;
 

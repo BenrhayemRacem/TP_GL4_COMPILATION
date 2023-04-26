@@ -14,3 +14,5 @@ personal_notes.txt
 *.tab.*
 
 *.gch
+
+*.copy*

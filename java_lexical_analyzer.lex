@@ -109,11 +109,11 @@ WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*
 
 {COMMENT_LINE}                              /* no action */
 {COMMENT_BLOCK}                             /* no action */
-{WRONG_COMMENT_BLOCK}                       { fprintf(stderr,"wrong comment block  on line :%d\n",yylineno); }
+{WRONG_COMMENT_BLOCK}                       {lexicerror("unclosed comment");}
 
 
 
-{wrong_identifier}                          {fprintf(stderr,"illegal identifier \'%s\' on line :%d\n",yytext,yylineno);}
+{wrong_identifier}                          {lexicerror(concat("illegal identifier ", yytext));}
 
 
 

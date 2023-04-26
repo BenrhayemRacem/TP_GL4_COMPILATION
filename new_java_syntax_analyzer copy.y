@@ -1,5 +1,6 @@
 %{
     #include "semantic.c"
+    #include "generator.c"
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -16,11 +17,13 @@
 	extern int yylineno;
     extern int i;
     extern int j;
-    void syntaxerror(const char *msg);
+
 	void yyerror(const char *msg);
 
     void BeginSemantique();
     void EndSemantique();
+    void BeginCodeGen();
+    void EndCodeGen();
 %}
 
 %token identifier
@@ -85,7 +88,7 @@ MainClass              : MainHead MainBody
 MainHead               : ClassHead opening_curly_brace keyword_public keyword_static keyword_void keyword_main { g_type = tVoid; verifierFoncID("main"); } opening_parenthesis type_string {g_type = tString;}  opening_bracket closing_bracket
                        ;
 
-MainBody               : identifier { verifierVarID(nom);}  closing_parenthesis { foncDecEnd(); } opening_curly_brace StatementS  closing_curly_brace {finFonction();} MethodDeclarationS closing_curly_brace  {finClass();}
+MainBody               : identifier { verifierVarID(nom);}  closing_parenthesis { foncDecEnd(); } opening_curly_brace StatementS  closing_curly_brace {finFonction();} MethodDeclarationS closing_curly_brace  {finClass();tabCodeInt[indextab]=creerCode("SORTIE");indextab++;}
                        ;
 
 ClassDeclarationS	   : ClassDeclaration ClassDeclarationS
@@ -143,19 +146,19 @@ StatementS             : Statement StatementS
 
 Statement              : opening_curly_brace StatementS closing_curly_brace
                        | VarDeclaration
-                       | keyword_if opening_parenthesis Expression closing_parenthesis 
-                        opening_curly_brace StatementS closing_curly_brace 
-                         keyword_else opening_curly_brace StatementS closing_curly_brace  
-                       | keyword_while  opening_parenthesis Expression closing_parenthesis 
-                        opening_curly_brace StatementS closing_curly_brace 
+                       | keyword_if opening_parenthesis Expression closing_parenthesis {tabCodeInt[indextab]=creerCode("SIFAUX");indexIf=indextab;indextab++;} 
+                        opening_curly_brace StatementS closing_curly_brace  {tabCodeInt[indextab]=creerCode("SAUT");indextab++;tabCodeInt[indexIf].operande=indextab;indexIf=indextab-1;}
+                         keyword_else opening_curly_brace StatementS closing_curly_brace   {tabCodeInt[indexIf].operande=indextab;}
+                       | keyword_while {indexWhile1=indextab;}  opening_parenthesis Expression closing_parenthesis  {tabCodeInt[indextab]=creerCode("TANTQUEFAUX");indexWhile2=indextab;indextab++;}
+                        opening_curly_brace StatementS closing_curly_brace {tabCodeInt[indextab]=creerOp("TANTQUE",indexWhile1);indextab++;tabCodeInt[indexWhile2].operande=indextab;} 
                        | keyword_System_out_println opening_parenthesis Expression closing_parenthesis semicolon
-                       | Identifieraff  operator_affectation Expression semicolon  
+                       | Identifieraff  operator_affectation Expression semicolon  {tabCodeInt[indextab]=creerOp("STORE",getAddress(nomaff,table_local));indextab++;}
                        
                        | Identifieraff  opening_bracket Expression closing_bracket operator_affectation Expression semicolon
                        
                        ;
 
-Expression             : INTEGER_LITERAL  ExpressionComp
+Expression             : INTEGER_LITERAL  {tabCodeInt[indextab]=creerOp("LDC",numval);indextab++;}  ExpressionComp
                        | BOOLEAN_LITERAL ExpressionComp
                        | STRING_LITERAL ExpressionComp
                        | Identifierexp ExpressionComp
@@ -172,8 +175,8 @@ Expression             : INTEGER_LITERAL  ExpressionComp
                        
                        ;
 
-ExpressionComp         : Operator  Expression  ExpressionComp
-                       | Logic Expression  ExpressionComp
+ExpressionComp         : Operator   Expression {tabCodeInt[indextab]=creerCode(oper);indextab++;}  ExpressionComp
+                       | Logic Expression {tabCodeInt[indextab]=creerCode(oper);indextab++;}  ExpressionComp
                        | opening_bracket Expression closing_bracket ExpressionComp
                         
                        | point keyword_length ExpressionComp
@@ -209,7 +212,7 @@ Logic                  : logical_operator_and
                        ;
 Identifier             : identifier
                        ;
-Identifierexp          : identifier {checkID(nom)}
+Identifierexp          : identifier {checkID(nom);tabCodeInt[indextab]=creerOp("LDV",getAddress(nom,table_local));indextab++;}
                        ;
 Identifieraff          : identifier {checkIDOnInit(nom); strcpy(nomaff, nom);}
                        ;
@@ -227,9 +230,11 @@ extern FILE *yyin;
 int main(int argc, char **argv)
 {
 yyin = fopen(argv[1], "r");
+ BeginCodeGen();
  BeginSemantique();
  yyparse();
  EndSemantique();
+ EndCodeGen();
 }
 
 void BeginSemantique()
@@ -270,6 +275,12 @@ void EndSemantique()
     destructSymbolsTable(table_local);
 	destructSymbolsTable(table);
 	destructSymbolsTable(table_class);
-    }
+}
 
-    
+void BeginCodeGen(){
+    indextab = 0;
+}
+
+void EndCodeGen(){
+    genererCode();
+}

@@ -2,10 +2,22 @@
  /* We usually need these... */	
  #include <stdio.h>	
  #include <stdlib.h>	
- 		
- #include "new_java_syntax_analyzer.tab.h"	                                                                         	
+#include <string.h>
+ #include <math.h>		
+ 
+
  /* Local stuff we need here... */	
-#include <math.h>	 			
+ #include "new_java_syntax_analyzer.tab.h"
+ 
+int i=0;
+int j=0;
+extern char nom[];
+extern int numval;
+void yyerror(char const *msg);
+void lexicerror ( const char *msg);
+ void semanticerror (const char *str);
+ void semanticwarning ( char *str);
+ char* concat(char* s1, char* s2);
 %}
 
 
@@ -82,11 +94,11 @@ WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*
 {bl}                                        /* no action */
 "\n"                                        /* no action */
 
-{INTEGER_LITERAL}                           { return  INTEGER_LITERAL  ; }
+{INTEGER_LITERAL}                           { numval = atoi(yytext); return  INTEGER_LITERAL  ; }
 {BOOLEAN_LITERAL}                           { return  BOOLEAN_LITERAL  ; }
 {STRING_LITERAL}                            { return  STRING_LITERAL  ; }
 
-{identifier}                                { return  identifier  ; }
+{identifier}                                { strcpy(nom, yytext); return  identifier  ; }
 
 {opening_parenthesis}                       { return  opening_parenthesis  ; }
 {closing_parenthesis}                       { return  closing_parenthesis  ; }
@@ -106,8 +118,42 @@ WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*
 
 
 %%
+void yyerror(const char *str)
+{
 
+    if(str[0]=='s'){
+        return;
+    }
+    fprintf(stderr,"#  %s\n",str);
+	
+}
 
+void lexicerror ( const char *msg ){
+    i++;
+    char errstr[200];
+        sprintf(errstr,"Lexical error on line %d, %s",yylineno,msg);
+    yyerror(errstr);
+}
+void syntaxerror (const char *str){
+    i++;
+    char errstr[200];
+    sprintf(errstr,"Syntax error on line %d, %s",yylineno,str);
+    yyerror(errstr);
+}
+
+void semanticerror (const char *str){
+    i++;
+    char errstr[200];
+    sprintf(errstr,"Semantic error on line %d, %s",yylineno,str);
+    yyerror(errstr);
+}
+
+void semanticwarning (char *nom){
+    j++;
+    char errstr[200];
+    sprintf(errstr,"Semantic warning on line %d, declared variable is not used: %s",yylineno,nom);
+    yyerror(errstr);
+}
 
 int yywrap()
 {

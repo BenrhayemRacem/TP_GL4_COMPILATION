@@ -12,3 +12,5 @@ personal_notes.txt
 
 *.exe
 *.tab.*
+
+*.gch

@@ -1,3 +1,15 @@
 .vscode/
 java_lexical_analyzer.exe
 java_lexical_analyzer.c
+
+
+lex.yy.c
+
+personal_notes.txt
+
+*.exe
+*.tab.*
+
+*.gch
+
+*.copy*

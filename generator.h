@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 //static char * code_op [] = { "LDC", "LDV", "STORE", "APPEL", "ENTREE", "SORTIE", "RETOUR", "ADD", "MUL", "DIV",
-  //                          "SUB", "INF", "INFE", "SUP", "SUPE", "DIF", "EGAL"};
+//                          "SUB", "INF", "INFE", "SUP", "SUPE", "DIF", "EGAL"};
 
 typedef struct ENTREE_CODE
 {
     char* code_op;
     int operande;
     char* nomFct;
-}ENTREE_CODE;
+} ENTREE_CODE;
 
 
 

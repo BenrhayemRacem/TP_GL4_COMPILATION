@@ -9,7 +9,8 @@ def run_command():
         f.write(program)
 
     command = ".\\test.exe .\\test.txt"
-    output = subprocess.check_output(command, stderr=subprocess.STDOUT, universal_newlines=True)
+    output = subprocess.check_output(
+        command, stderr=subprocess.STDOUT, universal_newlines=True)
 
     result_field.insert(tk.END, output)
 

@@ -3,14 +3,15 @@ import subprocess
 
 
 def run_command():
-    program = text_field.get("1.0", 'end-1c')
+    program = text_field.get("1.0", "end-1c")
 
     with open("test.txt", "w") as f:
         f.write(program)
 
     command = ".\\test.exe .\\test.txt"
     output = subprocess.check_output(
-        command, stderr=subprocess.STDOUT, universal_newlines=True)
+        command, stderr=subprocess.STDOUT, universal_newlines=True
+    )
 
     result_field.insert(tk.END, output)
 

@@ -1,14 +1,14 @@
-%{	
- /* We usually need these... */	
- #include <stdio.h>	
- #include <stdlib.h>	
+%{
+ /* We usually need these... */
+ #include <stdio.h>
+ #include <stdlib.h>
 #include <string.h>
- #include <math.h>		
- 
+ #include <math.h>
 
- /* Local stuff we need here... */	
+
+ /* Local stuff we need here... */
  #include "new_java_syntax_analyzer.tab.h"
- 
+
 int i=0;
 int j=0;
 extern char nom[];
@@ -23,7 +23,7 @@ void lexicerror ( const char *msg);
 
 %option yylineno
 
-delim                                [ \t] 
+delim                                [ \t]
 bl                                   {delim}+
 
 digit                                [0-9]
@@ -48,7 +48,7 @@ closing_curly_brace                  (\})
 
 COMMENT_LINE                         "//".*
 COMMENT_BLOCK                        "/*"([^*]|\*+[^*/])*\*+"/"
-WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*   
+WRONG_COMMENT_BLOCK                  \/\*([^(\*\/)]|\n)*
 
 
 %%
@@ -125,7 +125,7 @@ void yyerror(const char *str)
         return;
     }
     fprintf(stderr,"#  %s\n",str);
-	
+
 }
 
 void lexicerror ( const char *msg ){
@@ -159,5 +159,3 @@ int yywrap()
 {
 	return(0);
 }
-
-

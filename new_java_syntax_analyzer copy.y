@@ -12,7 +12,7 @@
     int indexIf;
     int indexWhile1;
     int indexWhile2;
-    
+
 	int yylex(void);
 	extern int yylineno;
     extern int i;
@@ -79,7 +79,7 @@
 %%
 
 Program		           : MainClass ClassDeclarationS
-                       
+
                        ;
 
 MainClass              : MainHead MainBody
@@ -96,15 +96,15 @@ ClassDeclarationS	   : ClassDeclaration ClassDeclarationS
                        ;
 
 ClassDeclaration       : ClassHead keyword_extends Identifier opening_curly_brace VarDeclarationS MethodDeclarationS closing_curly_brace {finClass();}
-                        
-                        
-                       
+
+
+
                        | ClassHead opening_curly_brace VarDeclarationS MethodDeclarationS closing_curly_brace  {finClass();}
-                       
+
                        ;
 
 ClassHead              : keyword_class Identifier  {verifierClassID(nom);}
-                       
+
                        ;
 
 VarDeclarationS        : VarDeclaration VarDeclarationS
@@ -112,22 +112,22 @@ VarDeclarationS        : VarDeclaration VarDeclarationS
                        ;
 
 VarDeclaration         : Variable  semicolon
-                       
+
                        ;
 
 VariableS              : Variable {verifierVarID(nom);}   comma VariableS
                        | Variable {verifierVarID(nom);}
                        |
-                       
+
                        ;
 
 Variable               : Type Identifier
-                       
+
                        ;
 
 MethodDeclarationS     : MethodDeclaration MethodDeclarationS
                        |
-                       
+
                        ;
 
 MethodDeclaration      : keyword_public Variable { verifierFoncID(nom); }  opening_parenthesis VariableS closing_parenthesis {foncDecEnd();} opening_curly_brace StatementS  keyword_return Expression semicolon closing_curly_brace   {finFonction();}
@@ -146,16 +146,16 @@ StatementS             : Statement StatementS
 
 Statement              : opening_curly_brace StatementS closing_curly_brace
                        | VarDeclaration
-                       | keyword_if opening_parenthesis Expression closing_parenthesis {tabCodeInt[indextab]=creerCode("SIFAUX");indexIf=indextab;indextab++;} 
+                       | keyword_if opening_parenthesis Expression closing_parenthesis {tabCodeInt[indextab]=creerCode("SIFAUX");indexIf=indextab;indextab++;}
                         opening_curly_brace StatementS closing_curly_brace  {tabCodeInt[indextab]=creerCode("SAUT");indextab++;tabCodeInt[indexIf].operande=indextab;indexIf=indextab-1;}
                          keyword_else opening_curly_brace StatementS closing_curly_brace   {tabCodeInt[indexIf].operande=indextab;}
                        | keyword_while {indexWhile1=indextab;}  opening_parenthesis Expression closing_parenthesis  {tabCodeInt[indextab]=creerCode("TANTQUEFAUX");indexWhile2=indextab;indextab++;}
-                        opening_curly_brace StatementS closing_curly_brace {tabCodeInt[indextab]=creerOp("TANTQUE",indexWhile1);indextab++;tabCodeInt[indexWhile2].operande=indextab;} 
+                        opening_curly_brace StatementS closing_curly_brace {tabCodeInt[indextab]=creerOp("TANTQUE",indexWhile1);indextab++;tabCodeInt[indexWhile2].operande=indextab;}
                        | keyword_System_out_println opening_parenthesis Expression closing_parenthesis semicolon
                        | Identifieraff  operator_affectation Expression semicolon  {tabCodeInt[indextab]=creerOp("STORE",getAddress(nomaff,table_local));indextab++;}
-                       
+
                        | Identifieraff  opening_bracket Expression closing_bracket operator_affectation Expression semicolon
-                       
+
                        ;
 
 Expression             : INTEGER_LITERAL  {tabCodeInt[indextab]=creerOp("LDC",numval);indextab++;}  ExpressionComp
@@ -164,51 +164,51 @@ Expression             : INTEGER_LITERAL  {tabCodeInt[indextab]=creerOp("LDC",nu
                        | Identifierexp ExpressionComp
                        | keyword_this ExpressionComp
                        | keyword_new type_int opening_bracket Expression closing_bracket ExpressionComp
-                        
+
                        | keyword_new Identifier opening_parenthesis closing_parenthesis ExpressionComp
-                       
+
                        | keyword_new Identifier opening_parenthesis ExpressionS closing_parenthesis ExpressionComp
-                       
-                      
+
+
                        | logical_operator_not Expression ExpressionComp
                        | opening_parenthesis Expression closing_parenthesis ExpressionComp
-                       
+
                        ;
 
 ExpressionComp         : Operator   Expression {tabCodeInt[indextab]=creerCode(oper);indextab++;}  ExpressionComp
                        | Logic Expression {tabCodeInt[indextab]=creerCode(oper);indextab++;}  ExpressionComp
                        | opening_bracket Expression closing_bracket ExpressionComp
-                        
+
                        | point keyword_length ExpressionComp
-                      
+
                        | MethodCall opening_parenthesis ExpressionS closing_parenthesis {foncCallEnd();} ExpressionComp
-                        
-                       
+
+
                        | MethodCall opening_parenthesis closing_parenthesis  {g_nbParam = 0;foncCallEnd();}  ExpressionComp
-                      
+
                        |
                        ;
 
-MethodCall             : point Identifier {verifierFoncIDDeclare(nom);} 
+MethodCall             : point Identifier {verifierFoncIDDeclare(nom);}
                        ;
 
-ExpressionS            : Expression {g_nbParam ++;} 
+ExpressionS            : Expression {g_nbParam ++;}
                         comma ExpressionS
-                       | Expression {g_nbParam ++;} 
-                      
+                       | Expression {g_nbParam ++;}
+
                        ;
-Operator               : arith_operator_add {strcpy(oper, "ADD");} 
+Operator               : arith_operator_add {strcpy(oper, "ADD");}
                        | arith_operator_multiply  {strcpy(oper, "MUL");}
-                       
+
                        | arith_operator_substract  {strcpy(oper, "SUB");}
-                      
+
                        ;
-Logic                  : logical_operator_and 
+Logic                  : logical_operator_and
                        | logical_operator_less_than {strcpy(oper, "INF");}
-                      
+
                        | logical_operator_less_or_equal_than  {strcpy(oper, "INFE");}
-                       
-                    
+
+
                        ;
 Identifier             : identifier
                        ;
